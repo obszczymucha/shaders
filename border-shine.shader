@@ -1,5 +1,6 @@
 uniform float4 borderColor;
 uniform float2 scale;
+uniform float cycleTimeInSeconds = 12.0;
 
 float4 mainImage(VertData v_in) : TARGET {
   // Check if we're in the border area
@@ -12,8 +13,19 @@ float4 mainImage(VertData v_in) : TARGET {
     float diagonalPos = p.x - p.y; // Changed from + to - for correct direction
 
     // Animation: move the gradient from bottom-left to top-right
-    float time = elapsed_time * 2.0;
-    float gradientCenter = -3.0 + fmod(time, 6.0); // Sweep across larger area
+    float cyclePosition = fmod(elapsed_time, cycleTimeInSeconds);
+
+    // Only advance the gradient if we're in the active part of the cycle (not
+    // in delay)
+    float gradientCenter;
+
+    if (cyclePosition < cycleTimeInSeconds) {
+      float time = cyclePosition * 2.0;
+      gradientCenter = -3.0 + time; // Sweep across larger area
+    } else {
+      // When not swiping, keep gradient out of view
+      gradientCenter = 3.0; // Position after complete sweep
+    }
 
     // Create the shine gradient
     float shineWidth = 0.3;
