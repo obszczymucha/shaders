@@ -1,6 +1,19 @@
 // Helper function for 2x2 matrix multiplication
 float2 mul_mat2(float4 m, float2 v) { return float2(m.x * v.x + m.y * v.y, m.z * v.x + m.w * v.y); }
 
+// Helper function to adjust saturation of a color - component by component approach
+float4 adjust_saturation(float4 color, float saturation) {
+  // Convert to grayscale using luminance values
+  float gray = color.r * 0.299 + color.g * 0.587 + color.b * 0.114;
+
+  // Manual linear interpolation between gray and original color
+  float r = gray + saturation * (color.r - gray);
+  float g = gray + saturation * (color.g - gray);
+  float b = gray + saturation * (color.b - gray);
+
+  return float4(r, g, b, color.a);
+}
+
 float4 mainImage(VertData v_in) : TARGET {
   // Rotation angle in degrees and conversion to radians
   // Create a ping-pong effect between 0 and 1
@@ -76,5 +89,7 @@ float4 mainImage(VertData v_in) : TARGET {
                             // Rim highlight
                             / (0.03 + abs(length(p) - 0.7)));
 
-  return result;
+  // Apply saturation adjustment (increase value above 1.0 for higher saturation)
+  float saturation_factor = 1.5; // Adjust this value to control saturation
+  return adjust_saturation(result, saturation_factor);
 }
