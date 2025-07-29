@@ -101,10 +101,30 @@ float4 mainImage(VertData v_in) : TARGET {
                                      // Rim highlight
                                      / (0.03 + abs(length(p) - 0.7)));
 
-  // Create pure red with the calculated intensity but preserve original alpha
-  float4 result = float4(intensity, intensity * 0.5, 0.0, original_result.a);
+  // Calculate an average brightness to detect shine areas
+  float brightness = (original_result.r + original_result.g + original_result.b) / 3.0;
+
+  // Simpler approach with smooth transitions
+  float4 result;
+
+  // Start with pure red based on the intensity calculation
+  result.r = intensity;
+
+  // For white highlights - use whiteness factor to blend towards white
+  // This creates a smooth transition from red to white for bright areas
+  float whiteness = smoothstep(0.8, 0.95, brightness);
+  result.r = result.r * (1.0 - whiteness) + whiteness;
+  result.g = whiteness;
+  result.b = whiteness;
+
+  // Add a subtle orange tint to mid-tones (avoid green/blue)
+  // This adds orange to mid-brightness areas but not to whites or deep reds
+  float orange_factor = smoothstep(0.2, 0.5, brightness) * (1.0 - whiteness);
+  result.g += result.r * orange_factor * 0.2;
+
+  result.a = original_result.a;
 
   // Apply saturation adjustment (increase value above 1.0 for higher saturation)
-  float saturation_factor = 1.0; // Adjust this value to control saturation
+  float saturation_factor = .7; // Adjust this value to control saturation
   return adjust_saturation(result, saturation_factor);
 }
