@@ -14,8 +14,8 @@ float4 mainImage(VertData v_in) : TARGET {
   float2 p = (F + F - r) / r.y / 0.7;
 
     // Apply oscillating rotation between 20 and 65 degrees
-    float oscillation = sin(elapsed_time * 0.05) * 0.5 + 0.5; // Value between 0 and 1
-    float angleDegrees = 20.0 + smoothstep(0.0, 1.0, oscillation) * 65.0; // Smoothly interpolate between 20 and 65
+    float oscillation = sin(elapsed_time * 0.5) * 0.5 + 0.5; // Value between 0 and 1
+    float angleDegrees = 20.0 + smoothstep(0.0, 1.0, oscillation) * 45.0; // Smoothly interpolate between 20 and 65
     float angle = radians(angleDegrees);
   float2x2 rotationMatrix =
       float2x2(cos(angle), -sin(angle), sin(angle), cos(angle));
