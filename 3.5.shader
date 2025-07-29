@@ -79,17 +79,32 @@ float4 mainImage(VertData v_in) : TARGET {
   float disk_radius = length(sin(v / 0.3) * 0.4 + c * (3.0 + d));
 
   // Red/blue gradient
-  float4 result = 1.0 - exp(-exp(c.x * float4(0.6, -0.4, -1, 0))
-                            // Wave coloring
-                            / w.xxxx
-                            // Acretion disk brightness
-                            / (2.0 + disk_radius * disk_radius / 4.0 - disk_radius)
-                            // Center darkness
-                            / (0.5 + 1.0 / a)
-                            // Rim highlight
-                            / (0.03 + abs(length(p) - 0.7)));
+  // Calculate intensity using the original formula but we'll only use it for the red channel
+  float intensity = 1.0 - exp(-exp(c.x * 0.6)
+                              // Wave coloring
+                              / w.x
+                              // Acretion disk brightness
+                              / (2.0 + disk_radius * disk_radius / 4.0 - disk_radius)
+                              // Center darkness
+                              / (0.5 + 1.0 / a)
+                              // Rim highlight
+                              / (0.03 + abs(length(p) - 0.7)));
+
+  // Calculate the original result to get proper alpha channel
+  float4 original_result = 1.0 - exp(-exp(c.x * float4(0.6, -0.4, -1, 0))
+                                     // Wave coloring
+                                     / w.xxxx
+                                     // Acretion disk brightness
+                                     / (2.0 + disk_radius * disk_radius / 4.0 - disk_radius)
+                                     // Center darkness
+                                     / (0.5 + 1.0 / a)
+                                     // Rim highlight
+                                     / (0.03 + abs(length(p) - 0.7)));
+
+  // Create pure red with the calculated intensity but preserve original alpha
+  float4 result = float4(intensity, intensity * 0.5, 0.0, original_result.a);
 
   // Apply saturation adjustment (increase value above 1.0 for higher saturation)
-  float saturation_factor = 1.5; // Adjust this value to control saturation
+  float saturation_factor = 1.0; // Adjust this value to control saturation
   return adjust_saturation(result, saturation_factor);
 }
