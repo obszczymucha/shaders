@@ -44,12 +44,10 @@ float4 mainImage(VertData v_in) : TARGET {
     return float4(finalColor, borderColor.a);
   } else {
     // We're inside the image area - return normal image
-    float2 scaledUV = float2((v_in.uv.x - 0.5) * scale.x + 0.5,
-                             (v_in.uv.y - 0.5) * scale.y + 0.5);
+    float2 scaledUV = float2((v_in.uv.x - 0.5) * scale.x + 0.5, (v_in.uv.y - 0.5) * scale.y + 0.5);
 
     // Check if scaled UV is still within bounds
-    if (scaledUV.x >= 0.0 && scaledUV.x <= 1.0 && scaledUV.y >= 0.0 &&
-        scaledUV.y <= 1.0) {
+    if (scaledUV.x >= 0.0 && scaledUV.x <= 1.0 && scaledUV.y >= 0.0 && scaledUV.y <= 1.0) {
       return image.Sample(textureSampler, scaledUV);
     } else {
       return float4(0, 0, 0, 0); // Transparent gap

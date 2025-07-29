@@ -1,6 +1,3 @@
-// Converted from Shadertoy
-// Original: Blackhole with accretion disk and spiral distortions
-
 float4 mainImage(VertData v_in) : TARGET {
   // Iterator and attenuation (distance-squared)
   float i = 0.2;
@@ -13,12 +10,11 @@ float4 mainImage(VertData v_in) : TARGET {
   float2 F = v_in.uv * uv_size;
   float2 p = (F + F - r) / r.y / 0.7;
 
-    // Apply oscillating rotation between 20 and 65 degrees
-    float oscillation = sin(elapsed_time * 0.5) * 0.5 + 0.5; // Value between 0 and 1
-    float angleDegrees = 20.0 + smoothstep(0.0, 1.0, oscillation) * 45.0; // Smoothly interpolate between 20 and 65
-    float angle = radians(angleDegrees);
-  float2x2 rotationMatrix =
-      float2x2(cos(angle), -sin(angle), sin(angle), cos(angle));
+  // Apply oscillating rotation between 20 and 65 degrees
+  float oscillation = sin(elapsed_time * 0.5) * 0.5 + 0.5;              // Value between 0 and 1
+  float angleDegrees = 20.0 + smoothstep(0.0, 1.0, oscillation) * 45.0; // Smoothly interpolate between 20 and 65
+  float angle = radians(angleDegrees);
+  float2x2 rotationMatrix = float2x2(cos(angle), -sin(angle), sin(angle), cos(angle));
   p = mul(rotationMatrix, p);
 
   // Apply horizontal flip (mirror across y-axis)
@@ -34,8 +30,7 @@ float4 mainImage(VertData v_in) : TARGET {
 
   // Rotate and apply perspective
   float perspectiveFactor = 0.1 + i / dot(b, b);
-  float2x2 perspectiveMatrix =
-      float2x2(1.0, 1.0, d.x / perspectiveFactor, d.y / perspectiveFactor);
+  float2x2 perspectiveMatrix = float2x2(1.0, 1.0, d.x / perspectiveFactor, d.y / perspectiveFactor);
   float2 c = mul(perspectiveMatrix, p); // Changed order: matrix * vector
 
   // Calculate a for the spiral rotation
@@ -43,9 +38,8 @@ float4 mainImage(VertData v_in) : TARGET {
 
   // Rotate into spiraling coordinates
   float spiralAngle = 0.5 * log(a) + elapsed_time * i;
-  float2x2 spiralMatrix = float2x2(cos(spiralAngle), -sin(spiralAngle + 33.0),
-                                   sin(spiralAngle + 11.0), cos(spiralAngle)) /
-                          i;
+  float2x2 spiralMatrix =
+      float2x2(cos(spiralAngle), -sin(spiralAngle + 33.0), sin(spiralAngle + 11.0), cos(spiralAngle)) / i;
   float2 v = mul(spiralMatrix, c); // Changed order: matrix * vector
 
   // Waves cumulative total for coloring
@@ -81,8 +75,7 @@ float4 mainImage(VertData v_in) : TARGET {
   float rimHighlight = 0.03 + abs(length(p) - 0.7);
 
   // Final color calculation
-  float4 result = 1.0 - exp(-expResult / waveColor / diskBrightness /
-                            centerDarkness / rimHighlight);
+  float4 result = 1.0 - exp(-expResult / waveColor / diskBrightness / centerDarkness / rimHighlight);
 
   return result;
 }
