@@ -53,7 +53,7 @@ float4 mainImage(VertData v_in) : TARGET {
   // Red/blue gradient
   float4 result = 1.0 - exp(-exp(c.x * float4(0.6, -0.4, -1, 0))
                             // Wave coloring
-                            / w.xyyx
+                            / w.xxxx
                             // Acretion disk brightness
                             / (2.0 + disk_radius * disk_radius / 4.0 - disk_radius)
                             // Center darkness
