@@ -69,10 +69,10 @@ float4 mainImage(VertData v_in) : TARGET {
   float2 w = float2(0, 0);
 
   // Loop through waves
-  for (float j = 1.0; j < 12.0; j += 1.0) {
+  for (float j = 1.0; j < 10.0; j += 1.0) {
     w += 1.0 + sin(v);
     // Distort coordinates
-    v += 0.6 * sin(v.yx * j + elapsed_time) / j + 0.5;
+    v += 0.5 * sin(v.yx * j + elapsed_time) / j + 0.5;
   }
 
   // Acretion disk radius
