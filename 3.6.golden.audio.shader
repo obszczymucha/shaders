@@ -72,7 +72,7 @@ float4 mainImage(VertData v_in) : TARGET {
   // Waves cumulative total for coloring
   float2 w = float2(0, 0);
 
-  float audio = audio_magnitude > 0.55 ? 0.02 : 0.0;
+  float audio = audio_magnitude > 0.63 ? 0.02 : 0.0;
 
   // Loop through waves
   for (float j = 1.0; j < 10.0; j += 1.0) {
