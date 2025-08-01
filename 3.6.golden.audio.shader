@@ -92,7 +92,7 @@ float4 mainImage(VertData v_in) : TARGET {
                               // Acretion disk brightness
                               / (2.0 + disk_radius * disk_radius / 4.0 - disk_radius)
                               // Center darkness
-                              / ((0.5 - 0) + 1.0 / a)
+                              / ((0.6 - 0) + 1.0 / a)
                               // Rim highlight
                               / (0.03 - audio + abs(length(p) - 0.7)));
 
@@ -135,7 +135,7 @@ float4 mainImage(VertData v_in) : TARGET {
   // Apply tail fadeout - reduce brightness for extended flame areas
   float distance_from_center = length(p);
   float fadeout_start_distance = 0.8;
-  float fadeout_end_distance = 1.3;
+  float fadeout_end_distance = 1.4;
   float fadeout_strength = 1.0;
   float tail_fadeout = smoothstep(fadeout_start_distance, fadeout_end_distance, distance_from_center);
   result *= (1.0 - tail_fadeout * fadeout_strength);
