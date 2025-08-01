@@ -135,7 +135,7 @@ float4 mainImage(VertData v_in) : TARGET {
   // Apply tail fadeout - reduce brightness for extended flame areas
   float distance_from_center = length(p);
   float fadeout_start_distance = 0.8;
-  float fadeout_end_distance = 1.2;
+  float fadeout_end_distance = 1.3;
   float fadeout_strength = 1.0;
   float tail_fadeout = smoothstep(fadeout_start_distance, fadeout_end_distance, distance_from_center);
   result *= (1.0 - tail_fadeout * fadeout_strength);
