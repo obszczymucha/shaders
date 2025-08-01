@@ -1,0 +1,14 @@
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+    "D",      # pydocstyle (docstring rules)
+    "ANN",    # flake8-annotations (type annotations)
+    "COM812", # trailing-comma-missing
+    "ISC001", # single-line-implicit-string-concatenation
+    "T20",    # flake8-print (allow print statements)
+    "TRY300", # try-consider-else (allow explicit return after if)
+]
