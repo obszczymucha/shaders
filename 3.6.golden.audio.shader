@@ -14,6 +14,7 @@ float4 adjust_saturation(float4 color, float saturation) {
   return float4(r, g, b, color.a);
 }
 
+// Reload: Shader 3, Ring of Fire
 float4 mainImage(VertData v_in) : TARGET {
   // Rotation angle in degrees and conversion to radians
   // Create a ping-pong effect between 0 and 1
