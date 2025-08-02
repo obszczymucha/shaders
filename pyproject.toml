@@ -11,4 +11,5 @@ ignore = [
     "ISC001", # single-line-implicit-string-concatenation
     "T20",    # flake8-print (allow print statements)
     "TRY300", # try-consider-else (allow explicit return after if)
+    "PLR2004", # magic-value-comparison
 ]

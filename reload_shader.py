@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import sys
 
 try:
     import obsws_python as obs
@@ -11,11 +12,11 @@ OBSWS_AVAILABLE = obs is not None
 
 
 async def trigger_vendor_reload(
+    source_name: str,
+    filter_name: str,
     host: str = "192.168.1.198",
     port: int = 4455,
     password: str | None = None,
-    source_name: str = "Shader 3",
-    filter_name: str = "Ring of Fire",
 ) -> bool | None:
     """Trigger reload using CallVendorRequest"""
     print("🔥 Triggering shader reload using CallVendorRequest...")
@@ -62,15 +63,24 @@ async def trigger_vendor_reload(
 
 
 async def main():
+    # Parse command line arguments
+    if len(sys.argv) != 3:
+        print("❌ Usage: python reload_shader.py <scene_name> <filter_name>")
+        print("Example: python reload_shader.py 'Shader 3' 'Ring of Fire'")
+        sys.exit(1)
+
+    source_name = sys.argv[1]
+    filter_name = sys.argv[2]
+
     print("=" * 60)
-    print("🔥 OBS Shader Filter Vendor Reload Test")
+    print("🔥 OBS Shader Filter Vendor Reload")
     print("=" * 60)
     print("Using CallVendorRequest to shader_filter vendor")
-    print("Target: Source 'Shader 3' → Filter 'Ring of Fire'")
+    print(f"Target: Source '{source_name}' → Filter '{filter_name}'")
     print()
 
     if OBSWS_AVAILABLE:
-        await trigger_vendor_reload()
+        await trigger_vendor_reload(source_name=source_name, filter_name=filter_name)
     else:
         print("❌ obsws_python not available")
         print(r"\nInstall with:")
@@ -78,7 +88,7 @@ async def main():
         return
 
     print(r"\n" + "=" * 60)
-    print("✨ Test completed!")
+    print("✨ Reload completed!")
     print("Check OBS logs for vendor request messages")
 
 
